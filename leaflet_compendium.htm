@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GGNRA Compendium Maps</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="./scripts/Basic/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./scripts/Basic/basic.css" />
+    <link rel="stylesheet" href="./JSON/json_styles.css" type="text/css" />
+	<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+	<link rel="stylesheet" href="./scripts/ZoomBox/L.Control.ZoomBox.css" />
+	<link rel="stylesheet" href="./scripts/ZoomHome/leaflet.zoomhome.css" />
+	<link rel="stylesheet" href="./scripts/Label/leaflet.label.css" />
+    <link rel="stylesheet" href="./scripts/Print/easyPrint.css" type='text/css' />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+
+</head>
+<body>
+
+    <div class="arrow">&nbsp;</div>
+    <div class="boxed";<div>
+	
+<h2>&nbsp</h2>	
+&nbsp<span class="title">Compendium Maps</span>
+
+<br>
+&nbsp<span class="subtitle">For illustrative purposes only </span>
+<br>
+&nbsp<span class="subtitle">See <a target="_blank" href = "http://www.nps.gov/goga/learn/management/lawsandpolicies.htm">GGNRA Laws & Policies</a>
+for compendium text</span>
+
+    <h3>Golden Gate National Recreation Area
+    <br>National Park Service
+    <br>U.S. Department of the Interior</h3>
+
+    </div>
+
+<!--             Leaflet and Leaflet Plugins
+	``````````````````````````````````````````````````````````` -->
+	<script src="http://leafletjs.com/dist/leaflet.js"> </script>
+	<script src="./scripts/ZoomBox/L.Control.ZoomBox.js"> </script>
+	<script src="./scripts/ZoomHome/leaflet.zoomhome.min.js"> </script>
+	<script src="./scripts/Label/leaflet.label.js"> </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"> </script>
+    <script src="./scripts/Print/jQuery.print.js"> </script>
+    <script src="./scripts/Print/leaflet.easyPrint.js"> </script>
+
+<!--             geojson files
+	``````````````````````````````````````````````````````````` -->
+    <script src="./JSON/Base/goga.geojson" type="text/javascript"> </script>
+    <script src="./JSON/closure.geojson" type="text/javascript"> </script>
+    <script src="./JSON/stables.geojson" type="text/javascript"> </script>
+    <script src="./JSON/horse_hike.geojson" type="text/javascript"> </script>
+    <script src="./JSON/Parks.geojson" type="text/javascript"></script>
+
+    <!-- <script src="./JSON/stables.geojson" type="text/javascript"> </script> -->
+	<div id="map" style="width: 800px; height: 800px"></div>
+    
+    <script>
+
+
+
+	var parkStyle = {
+		color: "red",
+		weight: 1,
+		opacity: 1.0
+	};
+
+	var horse_hikeStyle = {
+		color: "purple",
+		weight: 1.5,
+		opacity: 1.0
+	};
+
+
+
+	var gogaStyle = {
+		color: "green",
+		weight: 1,
+		opacity: 0.3
+	};
+
+		var closureStyle = {
+		color: "red",
+		weight: 1,
+		opacity: 0.3
+	};
+
+
+
+
+	function featureFunction(feature, layer) {
+		if (feature.properties) {
+			layer.bindPopup("Park Name: <p>" + feature.properties.map_park_n)+ "</p>";
+		}
+		layer.on({
+   			mouseover:highlightFeature,
+   			mouseout: resetHighlight
+		});
+	}
+
+	function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#006837',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+	}
+
+	function resetHighlight(e){
+    	parks.resetStyle(e.target)
+	}
+
+
+        var gogajson = new L.geoJson(goga, {
+                    style: gogaStyle
+                       });
+        var closurejson = new L.geoJson(closure, {
+					onEachFeature: featureFunction,
+					style: closureStyle
+                  });
+		var stablesjson = new L.geoJson(stables);
+        var horse_hikejson = new L.geoJson(horse_hike, {
+					onEachFeature: featureFunction,
+					style: horse_hikeStyle
+                   });
+		// L.marker([37.86534, -122.57432]).bindLabel('Golden Gate Dairy Stables').addTo(stables);
+	    var parksjson = new L.geoJson(parks, {
+					onEachFeature: featureFunction,
+					style: parkStyle
+				       });
+
+
+
+
+	    var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
+            mqUrl = 'http://otile1.mqcdn.com/tiles/1.0.0/sat/{id}/{z}/{x}/{y}.jpg';
+            npsUrl = 'http://www.nps.gov/npmap/tools/park-tiles/{z}/{x}/{y}.jpg';
+
+	    var grayscale   = L.tileLayer(mbUrl, {id: 'examples.map-20v6611k', attribution: mbAttr}),
+		    streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
+		    nps = L.tileLayer(npsUrl, {attribution: mbAttr}),
+            aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+            type: 'sat',
+            ext: 'jpg',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+            subdomains: '1234'
+         });   
+
+    		var map = L.map('map', {
+			center: [37.82, -122.47],
+			zoom: 13,
+			layers: [grayscale, gogajson],
+			zoomControl: false
+
+		});
+
+
+        var zoomHome = L.Control.zoomHome();
+        zoomHome.addTo(map);
+
+        var control = L.control.zoomBox({modal: false});
+        map.addControl(control);
+
+		var baseLayers = {
+			"Grayscale": grayscale,
+			"Streets": streets,
+            "Aerial": aerial,
+            "NPS": nps
+		};
+
+		var overlays = {
+            "GGNRA Boundary": gogajson,
+			"Horse Stables": stablesjson,
+			"Closures": closurejson,
+            "Horses & Hiking": horse_hikejson,
+            "SF Parks": parksjson
+		};
+
+		L.control.layers(baseLayers, overlays).addTo(map);
+
+
+        L.easyPrint().addTo(map);
+
+	 </script>
+
+
+
+</body>
+</html>
