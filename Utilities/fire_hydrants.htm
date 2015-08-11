@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hydrant Maps</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./../scripts/Basic/basic.css" />
+    <link rel="stylesheet" href="./../JSON/json_styles.css" type="text/css" />
+	<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+	<link rel="stylesheet" href="./../scripts/ZoomBox/L.Control.ZoomBox.css" />
+	<link rel="stylesheet" href="./../scripts/ZoomHome/leaflet.zoomhome.css" />
+	<link rel="stylesheet" href="./../scripts/Label/leaflet.label.css" />
+    <link rel="stylesheet" href="./../scripts/Print/easyPrint.css" type='text/css' />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+
+</head>
+<body>
+
+    <div class="arrow">&nbsp;</div>
+    <div class="boxed";<div>
+	
+<h2>&nbsp</h2>	
+&nbsp<span class="title">Utility Mapping</span>
+
+<br>
+&nbsp<span class="subtitle">Fire Hydrants & Water Meters</span>
+<br>
+<!-- &nbsp<span class="subtitle">See <a target="_blank" href = "http://www.nps.gov/goga/learn/management/lawsandpolicies.htm">GGNRA Laws & Policies</a>
+for compendium text</span> -->
+
+    <h3>Golden Gate National Recreation Area
+    <br>National Park Service
+    <br>U.S. Department of the Interior</h3>
+
+    </div>
+
+<!--             Leaflet and Leaflet Plugins
+	``````````````````````````````````````````````````````````` -->
+	<script src="http://leafletjs.com/dist/leaflet.js"> </script>
+	<script src="./../scripts/ZoomBox/L.Control.ZoomBox.js"> </script>
+	<script src="./../scripts/ZoomHome/leaflet.zoomhome.min.js"> </script>
+	<script src="./../scripts/Label/leaflet.label.js"> </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"> </script>
+    <script src="./../scripts/Print/jQuery.print.js"> </script>
+    <script src="./../scripts/Print/leaflet.easyPrint.js"> </script>
+
+<!--             geojson files
+	``````````````````````````````````````````````````````````` -->
+	<script src="./../JSON/Base/goga.geojson" type="text/javascript"> </script>
+	<script src="./../JSON/Base/buildings.geojson" type="text/javascript"> </script>
+    <script src="./JSON/potable_water/hydrants.geojson" type="text/javascript"> </script>
+    <script src="./JSON/potable_water/water_lines.geojson" type="text/javascript"> </script>
+    <script src="./JSON/potable_water/water_meter.geojson" type="text/javascript"> </script>
+    <script src="./JSON/potable_water/water_valves.geojson" type="text/javascript"> </script>
+
+    <!-- <script src="./JSON/stables.geojson" type="text/javascript"> </script> -->
+	<div id="map" style="width: 800px; height: 800px"></div>
+    
+    <script>
+
+	var buildingStyle = {
+		color: "grey",
+		weight: 1,
+		opacity: 1.0
+	};
+
+
+	var water_lineStyle = {
+		color: "blue",
+		weight: 1,
+		opacity: 1.0
+	};
+
+	var gogaStyle = {
+		color: "green",
+		weight: 1,
+		opacity: 0.5
+	};
+
+    var hydrantIcon = L.icon({
+            iconUrl: './JSON/potable_water/icon/red_hydrant.png',
+            iconSize: [20, 20],
+            iconAnchor: [9, 21],
+            popupAnchor: [0, -14]
+    });
+
+
+    var hydrantLayer = L.geoJson(hydrants, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: hydrantIcon});
+        }
+    })
+
+    var meterIcon = L.icon({
+            iconUrl: './JSON/potable_water/icon/water_meter.png',
+            iconSize: [20, 20],
+            iconAnchor: [9, 21],
+            popupAnchor: [0, -14]
+    });
+
+    var meterLayer = L.geoJson(water_meter, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: meterIcon});
+        }
+    })
+
+
+
+    var valveIcon = L.icon({
+            iconUrl: './JSON/potable_water/icon/water_valve.png',
+            iconSize: [20, 20],
+            iconAnchor: [9, 21],
+            popupAnchor: [0, -14]
+    });
+
+
+    var valveLayer = L.geoJson(water_valves, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: valveIcon});
+        }
+    })
+
+
+
+
+
+    var southWest = L.latLng(37.304, -123.301),
+    northEast = L.latLng(38.262, -121.948),
+    bounds = L.latLngBounds(southWest, northEast);
+
+	function featureFunction(feature, layer) {
+		if (feature.properties) {
+			layer.bindPopup("Park Name: <p>" + feature.properties.map_park_n)+ "</p>";
+		}
+		layer.on({
+   			mouseover:highlightFeature,
+   			mouseout: resetHighlight
+		});
+	}
+
+	function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#006837',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+	}
+
+	function resetHighlight(e){
+    	parks.resetStyle(e.target)
+	}
+
+
+        var gogajson = new L.geoJson(goga, {
+                    style: gogaStyle
+                       });
+        var hydrantsjson = new L.geoJson(hydrants);
+
+		var water_linesjson = new L.geoJson(water_lines, {
+			         style: water_lineStyle
+		                });
+
+        var water_meterjson = new L.geoJson(water_meter);
+
+        var water_valvejson = new L.geoJson(water_valves);
+
+        var buildingsjson = new L.geoJson(buildings, {
+			         style: buildingStyle
+		                });
+
+		//L.marker([37.86534, -122.57432]).bindLabel('Golden Gate Dairy Stables').addTo(stables);
+
+
+	    var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
+            mqUrl = 'http://otile1.mqcdn.com/tiles/1.0.0/sat/{id}/{z}/{x}/{y}.jpg';
+            npsUrl = 'http://www.nps.gov/npmap/tools/park-tiles/{z}/{x}/{y}.jpg';
+
+	    var grayscale   = L.tileLayer(mbUrl, {id: 'examples.map-20v6611k', attribution: mbAttr}),
+		    streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
+		    nps = L.tileLayer(npsUrl, {attribution: mbAttr}),
+            aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+            type: 'sat',
+            ext: 'jpg',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+            subdomains: '1234'
+         });   
+
+    		var map = L.map('map', {
+			center: [37.82, -122.47],
+			zoom: 12,
+			layers: [grayscale, gogajson, hydrantLayer, buildingsjson, water_linesjson],
+			zoomControl: false,
+			maxBounds: bounds
+
+		});
+
+
+        var zoomHome = L.Control.zoomHome();
+        zoomHome.addTo(map);
+
+        var control = L.control.zoomBox({modal: false});
+        map.addControl(control);
+
+		var baseLayers = {
+			"Grayscale": grayscale,
+			"Streets": streets,
+            "Aerial": aerial
+		};
+
+		var overlays = {
+			"Buildings": buildingsjson,
+            "Fire Hydrants": hydrantLayer,
+			"Water Lines": water_linesjson,
+			"Water Meters": meterLayer,
+            "Water Valves": valveLayer
+		};
+
+		L.control.layers(baseLayers, overlays).addTo(map);
+
+
+        L.easyPrint().addTo(map);
+
+	 </script>
+
+
+
+</body>
+</html>

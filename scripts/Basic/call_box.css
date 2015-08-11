@@ -1,0 +1,70 @@
+body {
+        padding-left: 1em;
+        font-family: Georgia, "Times New Roman",
+          Times, serif;
+    color: white;
+    background-color: #EBE9E6 } 
+
+
+div.arrow {
+   width:54px; /*width of your image*/
+   height:71px; /*height of your image*/
+   background-image:url('./NPS_Arrow_Color.png');
+   margin:0; /* If you want no margin */
+   padding:0; /*if your want to padding */
+   margin-left: 735px;
+   position: absolute; top: 15px;
+}
+
+  h3 {
+    font-family: Helvetica, Geneva, Arial,
+    SunSans-Regular, sans-serif;
+    font-size: 11px;
+   margin-left: 522px;
+   position: absolute; top: 20px;
+}
+
+
+.boxed {
+  background: black;
+  width: 800px;
+  height: 85px;
+} 
+
+
+
+  h2 {
+    font-family: Helvetica, Geneva, Arial,
+          SunSans-Regular, sans-serif;
+          font-size: 3px  }
+
+.title{
+    font-family: Arial, sans-serif;
+          font-style: bold;
+          font-size: 26px;
+          font-weight:600;
+          vertical-align:top;
+          position: absolute; top: 30px;
+}
+
+.subtitle{
+    font-family: Arial;
+          font-style: bold;
+          font-size: 15px;
+          font-weight:500;
+          vertical-align:middle;
+          position: absolute; top: 60px;
+}
+
+.details{
+    font-family: Arial;
+          font-style: bold;
+          font-size: 10px;
+          vertical-align:middle;
+}
+   
+  a:link {
+    color: green }
+
+  a:visited {
+    color: purple }

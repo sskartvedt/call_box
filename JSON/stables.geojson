@@ -1,0 +1,14 @@
+var stables = {
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "Name": "Ocean View Farms", "Lat": 37.553380, "Long": -122.507530 }, "geometry": { "type": "Point", "coordinates": [ -122.50753029150465, 37.553382524834277 ] } },
+{ "type": "Feature", "properties": { "Name": "Ember Ridge Equestrian Center", "Lat": 37.528930, "Long": -122.497600 }, "geometry": { "type": "Point", "coordinates": [ -122.49759795110363, 37.528931315431599 ] } },
+{ "type": "Feature", "properties": { "Name": "Moss Beach Ranch", "Lat": 37.524590, "Long": -122.503040 }, "geometry": { "type": "Point", "coordinates": [ -122.50304143719427, 37.524593364355283 ] } },
+{ "type": "Feature", "properties": { "Name": "Renegade Ranch", "Lat": 37.533920, "Long": -122.500190 }, "geometry": { "type": "Point", "coordinates": [ -122.5001914990499, 37.533923283441069 ] } },
+{ "type": "Feature", "properties": { "Name": "Presidio Riding Club", "Lat": 37.831180, "Long": -122.515590 }, "geometry": { "type": "Point", "coordinates": [ -122.51558512846375, 37.831181933910678 ] } },
+{ "type": "Feature", "properties": { "Name": "Miwok Livery Stables", "Lat": 37.859890, "Long": -122.534080 }, "geometry": { "type": "Point", "coordinates": [ -122.53408421073036, 37.859889696121549 ] } },
+{ "type": "Feature", "properties": { "Name": "Golden Gate Dairy Stables", "Lat": 37.865340, "Long": -122.574320 }, "geometry": { "type": "Point", "coordinates": [ -122.57431951226509, 37.86534293962243 ] } }
+]
+}

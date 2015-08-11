@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GGNRA Call Box Map</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="./scripts/Basic/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./scripts/Basic/call_box.css" />
+    <link rel="stylesheet" href="./JSON/json_styles.css" type="text/css" />
+	<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+	<link rel="stylesheet" href="./scripts/ZoomBox/L.Control.ZoomBox.css" />
+	<link rel="stylesheet" href="./scripts/ZoomHome/leaflet.zoomhome.css" />
+	<link rel="stylesheet" href="./scripts/Label/leaflet.label.css" />
+    <link rel="stylesheet" href="./scripts/Print/easyPrint.css" type='text/css' />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+</head>
+<body>
+
+    <div class="arrow">&nbsp;</div>
+    <div class="boxed";<div>
+	
+<h2>&nbsp</h2>	
+&nbsp<span class="title">Call Box Map</span>
+
+<br>
+<!-- &nbsp<span class="subtitle">For illustrative purposes only </span>-->
+<br>
+    <h3>Golden Gate National Recreation Area
+    <br>National Park Service
+    <br>U.S. Department of the Interior</h3>
+
+    </div>
+
+<!--             Leaflet and Leaflet Plugins
+	``````````````````````````````````````````````````````````` -->
+	<script src="http://leafletjs.com/dist/leaflet.js"> </script>
+	<script src="./Utilities/Maki_Markers/Leaflet.MakiMarkers.js"> </script>
+	<script src="./scripts/ZoomBox/L.Control.ZoomBox.js"> </script>
+	<script src="./scripts/ZoomHome/leaflet.zoomhome.min.js"> </script>
+	<script src="./scripts/Label/leaflet.label.js"> </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"> </script>
+    <script src="./scripts/Print/jQuery.print.js"> </script>
+    <script src="./scripts/Print/leaflet.easyPrint.js"> </script>
+
+<!--             geojson files
+	``````````````````````````````````````````````````````````` -->
+    <script src="./JSON/Base/goga.geojson" type="text/javascript"> </script>
+    <script src="./JSON/callbox.geojson" type="text/javascript"> </script>
+
+
+    <!-- <script src="./JSON/stables.geojson" type="text/javascript"> </script> -->
+	<div id="map" style="width: 800px; height: 800px"></div>
+    
+    <script>
+
+    var icon = L.MakiMarkers.icon({icon: "telephone", color: "#b0b", size: "m"});
+    //L.marker([37.803, -122.502], {icon: icon}).addTo(map); 
+
+
+	var gogaStyle = {
+		color: "green",
+		weight: 1,
+		opacity: 0.3
+	};
+
+    var fofu = L.marker([37.7145888889,	-122.5027527778], {icon: icon}).bindLabel('GOGA 1<br>Fort Funston'),
+        rodeo = L.marker([37.8324722222, -122.5392500000], {icon: icon}).bindLabel('GOGA 2<br>Rodeo Beach'),
+        lands_01 = L.marker([37.7865277778, -122.5051388889], {icon: icon}).bindLabel('GOGA 3<br>Land’s End, Painted Rock'),
+        baker_01 = L.marker([37.7959166667, -122.4822222222], {icon: icon}).bindLabel('GOGA 4<br>Baker Beach North'),
+        lands_02 = L.marker([37.7866638889, -122.4945222222], {icon: icon}).bindLabel('GOGA 5<br>Land’s End, Eagle’s Point'),
+        foba = L.marker([37.8319305556,	-122.4777638889], {icon: icon}).bindLabel('GOGA 6<br>Fort Baker Fishing Pier'),
+        spencer = L.marker([37.8294166667, -122.4837777778], {icon: icon}).bindLabel('GOGA 7<br>Battery Spencer'),
+        fish = L.marker([37.8274166667, -122.5109444444], {icon: icon}).bindLabel('GOGA 8<br>Upper Fisherman’s Parking'),
+        tenn = L.marker([37.8458333333, -122.5497222222], {icon: icon}).bindLabel('GOGA 9<br>Tennessee Valley'),
+        crissy_01 = L.marker([37.8059722222, -122.4525555556], {icon: icon}).bindLabel('GOGA 20<br>Crissy Field, East Beach'),
+        crissy_02 = L.marker([37.8048611111, -122.4600555556], {icon: icon}).bindLabel('GOGA 21<br>Crissy Field, West Marsh'),
+        crissy_03 = L.marker([37.8062222222, -122.4685000000], {icon: icon}).bindLabel('GOGA 22<br>Crissy Field, across from Bldg 937'),
+        baker_02 = L.marker([37.7915000000, -122.4844166667], {icon: icon}).bindLabel('GOGA 23<br>Baker Beach South'),
+        fopo = L.marker([37.8100833333, -122.4765277778], {icon: icon},{riseOnHover: true}).bindLabel('GOGA 24<br>Fort Point'),
+        mube = L.marker([37.8610472222, -122.5746472222], {icon: icon}).bindLabel('GOGA 25<br>Muir Beach Parking Lot');
+
+    var call_spots = L.layerGroup([fofu, rodeo, lands_01, baker_01, lands_02, foba, spencer, fish, tenn, crissy_01, crissy_02, crissy_03, baker_02, fopo, mube]);
+
+
+
+	function featureFunction(feature, layer) {
+		if (feature.properties) {
+			layer.bindPopup("Phone Location: <p>" + feature.properties.call_spots)+ "</p>";
+		}
+		layer.on({
+   			mouseover:highlightFeature,
+   			mouseout: resetHighlight
+		});
+	}
+
+	function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#006837',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+	}
+
+	function resetHighlight(e){
+    	parks.resetStyle(e.target)
+	}
+
+
+        var gogajson = new L.geoJson(goga, {
+                    style: gogaStyle
+                       });
+
+	    var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
+            mqUrl = 'http://otile1.mqcdn.com/tiles/1.0.0/sat/{id}/{z}/{x}/{y}.jpg';
+            npsUrl = 'http://www.nps.gov/npmap/tools/park-tiles/{z}/{x}/{y}.jpg';
+
+	    var grayscale   = L.tileLayer(mbUrl, {id: 'examples.map-20v6611k', attribution: mbAttr}),
+		    streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
+		    nps = L.tileLayer(npsUrl, {attribution: mbAttr}),
+            aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+            type: 'sat',
+            ext: 'jpg',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+            subdomains: '1234'
+         });   
+
+
+    		var map = L.map('map', {
+			center: [37.80, -122.47],
+			zoom: 12,
+			layers: [grayscale, gogajson, call_spots],
+			maxBounds: ([[37.7, -122.68],[37.9, -122.35]]),
+			zoomControl: false
+
+		});
+
+
+        var zoomHome = L.Control.zoomHome();
+        zoomHome.addTo(map);
+
+        var control = L.control.zoomBox({modal: false});
+        map.addControl(control);
+
+		var baseLayers = {
+			"Grayscale": grayscale,
+			"Streets": streets,
+            "Aerial": aerial,
+            "NPS": nps
+		};
+
+		var overlays = {
+            "GGNRA Boundary": gogajson,
+			"Call_Spots": call_spots
+		};
+
+		L.control.layers(baseLayers, overlays).addTo(map);
+
+
+        L.easyPrint().addTo(map);
+
+	 </script>
+
+
+
+</body>
+</html>

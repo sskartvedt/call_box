@@ -1,0 +1,10 @@
+.leaflet-info-button-control {
+    font-size: 18px;
+ }
+.leaflet-info-button-control.active a {
+    color: #FFF;
+    background: #666;
+}
+.leaflet-info-button-crosshair {
+    cursor: crosshair !important;
+}
