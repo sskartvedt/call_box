@@ -1,0 +1,13 @@
+How to gh-pages
+
+    Create a front-end project & name index.html
+    cd into the project in terminal
+    Run git init to initialize the git repo in the project
+    Create & switch to branch called gh-pages - git checkout -b gh-pages
+    Go to github.com the website and create a new repo
+    Do not add a readme..
+    Use the cheatsheat to add the remote - git add remote....
+    Run git add . to add & stage all your files
+    Run git commit - m "initial commit" - to commit w/ a message of your choice
+    Run git push origin gh-pages - to push everything you just commited to the branch gh-pages
+    Check out your new fancy webpage in the browser at http://username.github.io/repository

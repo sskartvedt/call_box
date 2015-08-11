@@ -9,8 +9,7 @@
     <link rel="shortcut icon" href="./scripts/Basic/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="./scripts/Basic/call_box.css" />
     <link rel="stylesheet" href="./JSON/json_styles.css" type="text/css" />
-	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css" />
+	<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
 	<link rel="stylesheet" href="./scripts/ZoomBox/L.Control.ZoomBox.css" />
 	<link rel="stylesheet" href="./scripts/ZoomHome/leaflet.zoomhome.css" />
 	<link rel="stylesheet" href="./scripts/Label/leaflet.label.css" />
@@ -36,8 +35,7 @@
 
 <!--             Leaflet and Leaflet Plugins
 	``````````````````````````````````````````````````````````` -->
-	<script src="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js"> </script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"> </script>
+	<script src="http://leafletjs.com/dist/leaflet.js"> </script>
 	<script src="./Utilities/Maki_Markers/Leaflet.MakiMarkers.js"> </script>
 	<script src="./scripts/ZoomBox/L.Control.ZoomBox.js"> </script>
 	<script src="./scripts/ZoomHome/leaflet.zoomhome.min.js"> </script>
@@ -121,45 +119,19 @@
 	    var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
 				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-
-
-			//mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
-
-            //mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
-            //id =  'sskartvedt.n562336n'
-            //accessToken = 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
-
-
+			mbUrl = 'https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
             mqUrl = 'http://otile1.mqcdn.com/tiles/1.0.0/sat/{id}/{z}/{x}/{y}.jpg';
             npsUrl = 'http://www.nps.gov/npmap/tools/park-tiles/{z}/{x}/{y}.jpg';
 
-	    var grayscale   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'sskartvedt.3f2cfdba',
-        accessToken: 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
-        }),
-		    
-
-            // streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
-
-
-        streets   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18,
-        id: 'sskartvedt.n562336n',
-        accessToken: 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
-        }),
-
-
-        aerial   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        id: 'sskartvedt.n56b7b8o',
-        accessToken: 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
-        })
-
-
-
- 
+	    var grayscale   = L.tileLayer(mbUrl, {id: 'examples.map-20v6611k', attribution: mbAttr}),
+		    streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
+		    nps = L.tileLayer(npsUrl, {attribution: mbAttr}),
+            aerial = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+            type: 'sat',
+            ext: 'jpg',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
+            subdomains: '1234'
+         });   
 
 
     		var map = L.map('map', {
@@ -181,7 +153,8 @@
 		var baseLayers = {
 			"Grayscale": grayscale,
 			"Streets": streets,
-            "Aerial": aerial
+            "Aerial": aerial,
+            "NPS": nps
 		};
 
 		var overlays = {
