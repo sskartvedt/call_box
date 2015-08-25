@@ -81,7 +81,7 @@
         crissy_03 = L.marker([37.8062222222, -122.4685000000], {icon: icon}).bindLabel('GOGA 22<br>Crissy Field, across from Bldg 937'),
         baker_02 = L.marker([37.7915000000, -122.4844166667], {icon: icon}).bindLabel('GOGA 23<br>Baker Beach South'),
         fopo = L.marker([37.8100833333, -122.4765277778], {icon: icon},{riseOnHover: true}).bindLabel('GOGA 24<br>Fort Point'),
-        mube = L.marker([37.861168, -122.575339], {icon: icon}).bindLabel('GOGA 25<br>Muir Beach Parking Lot');
+        mube = L.marker([37.8610472222, -122.5746472222], {icon: icon}).bindLabel('GOGA 25<br>Muir Beach Parking Lot');
 
     var call_spots = L.layerGroup([fofu, rodeo, lands_01, baker_01, lands_02, foba, spencer, fish, tenn, crissy_01, crissy_02, crissy_03, baker_02, fopo, mube]);
 
@@ -133,7 +133,7 @@
             mqUrl = 'http://otile1.mqcdn.com/tiles/1.0.0/sat/{id}/{z}/{x}/{y}.jpg';
             npsUrl = 'http://www.nps.gov/npmap/tools/park-tiles/{z}/{x}/{y}.jpg';
 
-	    var grayscale   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	    grayscale = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         id: 'sskartvedt.3f2cfdba',
         accessToken: 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
@@ -143,7 +143,7 @@
             // streets  = L.tileLayer(mbUrl, {id: 'examples.map-i875mjb7',   attribution: mbAttr}),
 
 
-        streets   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        streets = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
         id: 'sskartvedt.n562336n',
@@ -151,7 +151,13 @@
         }),
 
 
-        aerial   = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        //nps-parkTiles = L.tileLayer('http://www.nps.gov/lib/npmap.js/2.0.0/npmap-bootstrap.min.js'), {
+        //attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>'
+        //}),
+
+
+
+        aerial = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         id: 'sskartvedt.n56b7b8o',
         accessToken: 'pk.eyJ1Ijoic3NrYXJ0dmVkdCIsImEiOiJjZTM4YTI4Y2E2NmY2NmVhZTYxOWMwZTQyMDQxNDBjZiJ9.eiO_FFUrTirrK4dPOAO-lA'
@@ -162,6 +168,11 @@
  
 
 
+
+
+
+
+
     		var map = L.map('map', {
 			center: [37.80, -122.47],
 			zoom: 12,
@@ -170,6 +181,9 @@
 			zoomControl: false
 
 		});
+
+
+
 
 
         var zoomHome = L.Control.zoomHome();
